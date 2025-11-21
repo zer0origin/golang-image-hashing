@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -69,28 +68,6 @@ func (ImageHash) ConvertHashToString(input uint64) string {
 
 	for i := input; i > 0; i = i / 62 {
 		remainer := i % 62
-		if remainer <= 9 {
-			s = strconv.FormatUint(remainer, 10)
-		} else {
-			c := string(charSet[remainer])
-			s = c + s
-		}
-	}
-
-	return s
-}
-
-// ConvertStringToHash uses base62 to uncompress and revert the base62 string back into its original form.
-func (ImageHash) ConvertStringToHash(input uint64) string {
-	s := ""
-	charSet := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-	for i := input; i > 0; i = i / 62 {
-		remainer := i % 62
-		fmt.Println(i)
-		fmt.Println(remainer)
-		fmt.Println("-------")
-
 		if remainer <= 9 {
 			s = strconv.FormatUint(remainer, 10)
 		} else {

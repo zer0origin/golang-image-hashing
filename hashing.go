@@ -1,17 +1,17 @@
-package ImageUtil
+package main
+
+import "C"
 
 import (
+	"encoding/base64"
+	"fmt"
 	"strconv"
 )
 
-type Hash struct {
-}
-
-var fnvOffsetBasis uint64 = 14695981039346656037
-var fnvPrime uint64 = 1099511628211
-
 // ConvertByteArrToNumberFNV1A By using the FNV-1A
-func (Hash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
+//
+//export ConvertByteArrToNumberFNV1A
+func ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
 	/*
 		algorithm fnv-1a is
 
@@ -23,6 +23,16 @@ func (Hash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
 
 			return hash
 	*/
+	fmt.Println("--- GO DIAGNOSTICS ---")
+	fmt.Printf("Total Length: %d\n", len(bytes))
+	if len(bytes) >= 5 {
+		fmt.Printf("First 5 bytes: %v\n", bytes[:5])
+		fmt.Printf("Last 5 bytes:  %v\n", bytes[len(bytes)-5:])
+	}
+	fmt.Println(len(bytes))
+	fmt.Println(ConvertByteArrToNumberSum(bytes))
+	var fnvOffsetBasis uint64 = 14695981039346656037
+	var fnvPrime uint64 = 1099511628211
 
 	var hash = fnvOffsetBasis
 
@@ -31,11 +41,58 @@ func (Hash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
 		hash = hash * fnvPrime
 	}
 
+	fmt.Printf("GO: %d\n", +hash)
+	return hash
+}
+
+// ConvertByteArrToNumberFNV1ABase64Encoded By using the FNV-1A
+//
+//export ConvertByteArrToNumberFNV1ABase64Encoded
+func ConvertByteArrToNumberFNV1ABase64Encoded(encodedData string) uint64 {
+	/*
+		algorithm fnv-1a is
+
+			hash := FNV_offset_basis
+
+			for each byte_of_data to be hashed do
+			    hash := hash XOR byte_of_data
+			    hash := hash × FNV_prime
+
+			return hash
+	*/
+	fmt.Println(encodedData)
+
+	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(encodedData)))
+	_, err := base64.StdEncoding.Decode(bytes, []byte(encodedData))
+	if err != nil {
+		panic("Unable to decode data!")
+	}
+
+	fmt.Println("--- GO DIAGNOSTICS ---")
+	fmt.Printf("Total Length: %d\n", len(bytes))
+	if len(bytes) >= 5 {
+		fmt.Printf("First 5 bytes: %v\n", bytes[:5])
+		fmt.Printf("Last 5 bytes:  %v\n", bytes[len(bytes)-5:])
+	}
+
+	var fnvOffsetBasis uint64 = 14695981039346656037
+	var fnvPrime uint64 = 1099511628211
+
+	var hash = fnvOffsetBasis
+
+	for _, byt := range bytes {
+		hash = hash ^ uint64(byt)
+		hash = hash * fnvPrime
+	}
+
+	fmt.Printf("GO: %d\n", +hash)
 	return hash
 }
 
 // ConvertByteArrToNumberSum By summing the bytes you get a decimal representation of the overall image values. Swapping bits in an image would result in the same number,
-func (Hash) ConvertByteArrToNumberSum(bytes []byte) uint64 {
+//
+//export ConvertByteArrToNumberSum
+func ConvertByteArrToNumberSum(bytes []byte) uint64 {
 	var k uint64 = 0
 	for _, byt := range bytes {
 		k = k + uint64(byt)
@@ -44,13 +101,16 @@ func (Hash) ConvertByteArrToNumberSum(bytes []byte) uint64 {
 	return k
 }
 
-func (t Hash) HashPageOfDocument(bytes []byte) uint64 {
-	k := t.ConvertByteArrToNumberFNV1A(bytes)
-	return t.Hash64shift(k)
+//export HashPageOfDocument
+func HashPageOfDocument(bytes []byte) uint64 {
+	k := ConvertByteArrToNumberFNV1A(bytes)
+	return Hash64shift(k)
 }
 
 // Hash64shift based on https://gist.github.com/badboy/6267743#64-bit-mix-functions, preformed an optimised Thomas Wang's 64-bit Integer Hash Function
-func (Hash) Hash64shift(key uint64) uint64 {
+//
+//export Hash64shift
+func Hash64shift(key uint64) uint64 {
 	key = (key) + (key << 21)
 	key = key ^ (key >> 24)
 	key = (key + (key << 3)) + (key << 8) // key * 265
@@ -62,7 +122,9 @@ func (Hash) Hash64shift(key uint64) uint64 {
 }
 
 // ConvertHashToString uses base62 to compress and convert the uint64 number into a more human-readable form.
-func (Hash) ConvertHashToString(input uint64) string {
+//
+//export ConvertHashToString
+func ConvertHashToString(input uint64) string {
 	s := ""
 	charSet := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -79,7 +141,12 @@ func (Hash) ConvertHashToString(input uint64) string {
 	return s
 }
 
-// NewImageHash Create a new instance of hash.
-func NewImageHash() Hash {
-	return Hash{}
+func main() {}
+
+//export convertFNVString
+func convertFNVString(cStr *C.char) uint64 {
+	data := C.GoString(cStr)
+	fmt.Printf("Go received string of length: %d\n", len(data))
+
+	return ConvertByteArrToNumberFNV1ABase64Encoded(data)
 }

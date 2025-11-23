@@ -78,3 +78,7 @@ func (Hash) ConvertHashToString(input uint64) string {
 
 	return s
 }
+
+func NewImageHashing() Hash {
+	return Hash{}
+}

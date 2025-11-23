@@ -1,4 +1,4 @@
-module github.com/zer0origin/golang-image-hasing
+module github.com/zer0origin/golang-image-hashing
 
 go 1.24.5
 

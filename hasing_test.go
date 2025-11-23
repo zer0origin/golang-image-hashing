@@ -10,10 +10,10 @@ import (
 )
 
 //go:embed EncodedImageExample1
-var File1 string
+var File1 string //TODO: Replace with a publicly accessible file
 
 //go:embed EncodedImageExample2
-var File2 string
+var File2 string //TODO: Replace with a publicly accessible file
 
 func TestHashingFile1(t *testing.T) {
 	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(File1)))

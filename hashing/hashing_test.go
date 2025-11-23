@@ -1,4 +1,4 @@
-package ImageUtil
+package hashing
 
 import (
 	_ "embed"
@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//go:embed EncodedImageExample1
+//go:embed EncodedImageExample1.txt
 var File1 string //TODO: Replace with a publicly accessible file
 
-//go:embed EncodedImageExample2
+//go:embed EncodedImageExample2.txt
 var File2 string //TODO: Replace with a publicly accessible file
 
 func TestHashingFile1(t *testing.T) {
@@ -23,16 +23,9 @@ func TestHashingFile1(t *testing.T) {
 		return
 	}
 
-	fmt.Println(fmt.Sprintf("Image Size: %2.f kb", float64(len(bytes)/1000)))
-
 	imageHash := Hash{}
 	hash := imageHash.HashPageOfDocument(bytes)
-	fmt.Println(hash)
-
-	fmt.Println("\nConvert:")
 	str := imageHash.ConvertHashToString(hash)
-	fmt.Println(str)
-
 	assert.Equal(t, str, "LmPjeyvClM4")
 }
 
@@ -44,15 +37,8 @@ func TestHashingFile2(t *testing.T) {
 		return
 	}
 
-	fmt.Println(fmt.Sprintf("Image Size: %2.f kb", float64(len(bytes)/1000)))
-
 	imageHash := Hash{}
 	hash := imageHash.HashPageOfDocument(bytes)
-	fmt.Println(hash)
-
-	fmt.Println("\nConvert:")
 	str := imageHash.ConvertHashToString(hash)
-	fmt.Println(str)
-
 	assert.Equal(t, str, "JWqHUeD4")
 }

@@ -1,28 +1,20 @@
-package ImageUtil
+package hashing
+
+import "C"
 
 import (
+	"encoding/base64"
+	"fmt"
 	"strconv"
 )
 
 type Hash struct {
 }
 
-var fnvOffsetBasis uint64 = 14695981039346656037
-var fnvPrime uint64 = 1099511628211
-
 // ConvertByteArrToNumberFNV1A By using the FNV-1A
 func (Hash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
-	/*
-		algorithm fnv-1a is
-
-			hash := FNV_offset_basis
-
-			for each byte_of_data to be hashed do
-			    hash := hash XOR byte_of_data
-			    hash := hash × FNV_prime
-
-			return hash
-	*/
+	var fnvOffsetBasis uint64 = 14695981039346656037
+	var fnvPrime uint64 = 1099511628211
 
 	var hash = fnvOffsetBasis
 
@@ -31,6 +23,35 @@ func (Hash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
 		hash = hash * fnvPrime
 	}
 
+	return hash
+}
+
+// ConvertByteArrToNumberFNV1ABase64Encoded By using the FNV-1A
+func (Hash) ConvertByteArrToNumberFNV1ABase64Encoded(encodedData string) uint64 {
+	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(encodedData)))
+	_, err := base64.StdEncoding.Decode(bytes, []byte(encodedData))
+	if err != nil {
+		panic("Unable to decode data!")
+	}
+
+	fmt.Println("--- GO DIAGNOSTICS ---")
+	fmt.Printf("Total Length: %d\n", len(bytes))
+	if len(bytes) >= 5 {
+		fmt.Printf("First 5 bytes: %v\n", bytes[:5])
+		fmt.Printf("Last 5 bytes:  %v\n", bytes[len(bytes)-5:])
+	}
+
+	var fnvOffsetBasis uint64 = 14695981039346656037
+	var fnvPrime uint64 = 1099511628211
+
+	var hash = fnvOffsetBasis
+
+	for _, byt := range bytes {
+		hash = hash ^ uint64(byt)
+		hash = hash * fnvPrime
+	}
+
+	fmt.Printf("GO: %d\n", +hash)
 	return hash
 }
 

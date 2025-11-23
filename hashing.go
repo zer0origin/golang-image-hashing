@@ -8,6 +8,9 @@ import (
 	"strconv"
 )
 
+type Hash struct {
+}
+
 // ConvertByteArrToNumberFNV1A By using the FNV-1A
 //
 //export ConvertByteArrToNumberFNV1A
@@ -60,7 +63,6 @@ func ConvertByteArrToNumberFNV1ABase64Encoded(encodedData string) uint64 {
 
 			return hash
 	*/
-	fmt.Println(encodedData)
 
 	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(encodedData)))
 	_, err := base64.StdEncoding.Decode(bytes, []byte(encodedData))
@@ -143,10 +145,25 @@ func ConvertHashToString(input uint64) string {
 
 func main() {}
 
-//export convertFNVString
+//export hashPageOfDocumentString
+func hashPageOfDocumentString(cStr *C.char) *C.char {
+	k := convertFNVString(cStr)
+	hash := Hash64shift(k)
+	return convertCString(ConvertHashToString(hash))
+}
+
+func convertString(cStr *C.char) string {
+	data := C.GoString(cStr)
+
+	return data
+}
+
+func convertCString(cStr string) *C.char {
+	return C.CString(cStr)
+}
+
 func convertFNVString(cStr *C.char) uint64 {
 	data := C.GoString(cStr)
-	fmt.Printf("Go received string of length: %d\n", len(data))
 
 	return ConvertByteArrToNumberFNV1ABase64Encoded(data)
 }

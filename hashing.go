@@ -79,7 +79,7 @@ func (Hash) ConvertHashToString(input uint64) string {
 	return s
 }
 
-// NewImageHashing Create a new instance of hash.
-func NewImageHashing() Hash {
+// NewImageHash Create a new instance of hash.
+func NewImageHash() Hash {
 	return Hash{}
 }

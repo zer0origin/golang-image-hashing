@@ -4,7 +4,6 @@ import "C"
 
 import (
 	"encoding/base64"
-	"fmt"
 	"strconv"
 )
 
@@ -34,13 +33,6 @@ func (Hash) ConvertByteArrToNumberFNV1ABase64Encoded(encodedData string) uint64 
 		panic("Unable to decode data!")
 	}
 
-	fmt.Println("--- GO DIAGNOSTICS ---")
-	fmt.Printf("Total Length: %d\n", len(bytes))
-	if len(bytes) >= 5 {
-		fmt.Printf("First 5 bytes: %v\n", bytes[:5])
-		fmt.Printf("Last 5 bytes:  %v\n", bytes[len(bytes)-5:])
-	}
-
 	var fnvOffsetBasis uint64 = 14695981039346656037
 	var fnvPrime uint64 = 1099511628211
 
@@ -51,7 +43,6 @@ func (Hash) ConvertByteArrToNumberFNV1ABase64Encoded(encodedData string) uint64 
 		hash = hash * fnvPrime
 	}
 
-	fmt.Printf("GO: %d\n", +hash)
 	return hash
 }
 

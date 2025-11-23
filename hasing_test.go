@@ -1,4 +1,4 @@
-package main
+package ImageUtil
 
 import (
 	_ "embed"
@@ -25,7 +25,7 @@ func TestHashingFile1(t *testing.T) {
 
 	fmt.Println(fmt.Sprintf("Image Size: %2.f kb", float64(len(bytes)/1000)))
 
-	imageHash := ImageHash{}
+	imageHash := Hash{}
 	hash := imageHash.HashPageOfDocument(bytes)
 	fmt.Println(hash)
 
@@ -46,7 +46,7 @@ func TestHashingFile2(t *testing.T) {
 
 	fmt.Println(fmt.Sprintf("Image Size: %2.f kb", float64(len(bytes)/1000)))
 
-	imageHash := ImageHash{}
+	imageHash := Hash{}
 	hash := imageHash.HashPageOfDocument(bytes)
 	fmt.Println(hash)
 

@@ -1,17 +1,17 @@
-package main
+package ImageUtil
 
 import (
 	"strconv"
 )
 
-type ImageHash struct {
+type Hash struct {
 }
 
 var fnvOffsetBasis uint64 = 14695981039346656037
 var fnvPrime uint64 = 1099511628211
 
 // ConvertByteArrToNumberFNV1A By using the FNV-1A
-func (ImageHash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
+func (Hash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
 	/*
 		algorithm fnv-1a is
 
@@ -35,7 +35,7 @@ func (ImageHash) ConvertByteArrToNumberFNV1A(bytes []byte) uint64 {
 }
 
 // ConvertByteArrToNumberSum By summing the bytes you get a decimal representation of the overall image values. Swapping bits in an image would result in the same number,
-func (ImageHash) ConvertByteArrToNumberSum(bytes []byte) uint64 {
+func (Hash) ConvertByteArrToNumberSum(bytes []byte) uint64 {
 	var k uint64 = 0
 	for _, byt := range bytes {
 		k = k + uint64(byt)
@@ -44,13 +44,13 @@ func (ImageHash) ConvertByteArrToNumberSum(bytes []byte) uint64 {
 	return k
 }
 
-func (t ImageHash) HashPageOfDocument(bytes []byte) uint64 {
+func (t Hash) HashPageOfDocument(bytes []byte) uint64 {
 	k := t.ConvertByteArrToNumberFNV1A(bytes)
 	return t.Hash64shift(k)
 }
 
 // Hash64shift based on https://gist.github.com/badboy/6267743#64-bit-mix-functions, preformed an optimised Thomas Wang's 64-bit Integer Hash Function
-func (ImageHash) Hash64shift(key uint64) uint64 {
+func (Hash) Hash64shift(key uint64) uint64 {
 	key = (key) + (key << 21)
 	key = key ^ (key >> 24)
 	key = (key + (key << 3)) + (key << 8) // key * 265
@@ -62,7 +62,7 @@ func (ImageHash) Hash64shift(key uint64) uint64 {
 }
 
 // ConvertHashToString uses base62 to compress and convert the uint64 number into a more human-readable form.
-func (ImageHash) ConvertHashToString(input uint64) string {
+func (Hash) ConvertHashToString(input uint64) string {
 	s := ""
 	charSet := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 

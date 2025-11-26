@@ -4,6 +4,7 @@ import "C"
 
 import (
 	"encoding/base64"
+	"fmt"
 	"strconv"
 )
 
@@ -30,7 +31,8 @@ func (Hash) ConvertByteArrToNumberFNV1ABase64Encoded(encodedData string) uint64 
 	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(encodedData)))
 	_, err := base64.StdEncoding.Decode(bytes, []byte(encodedData))
 	if err != nil {
-		panic("Unable to decode data!")
+		fmt.Println(encodedData)
+		panic("Unable to decode data " + err.Error())
 	}
 
 	var fnvOffsetBasis uint64 = 14695981039346656037

@@ -83,7 +83,7 @@ func (Hash) ConvertHashToString(input uint64) string {
 	for i := input; i > 0; i = i / 62 {
 		remainer := i % 62
 		if remainer <= 9 {
-			s = strconv.FormatUint(remainer, 10)
+			s = s + strconv.FormatUint(remainer, 10)
 		} else {
 			c := string(charSet[remainer])
 			s = c + s

@@ -20,45 +20,45 @@ var File3 string //TODO: Replace with a publicly accessible file
 
 func TestHashingFile1(t *testing.T) {
 	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(File1)))
-	_, err := base64.StdEncoding.Decode(bytes, []byte(File1))
+	n, err := base64.StdEncoding.Decode(bytes, []byte(File1))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	imageHash := Hash{}
-	hash := imageHash.HashPageOfDocument(bytes)
+	hash := imageHash.HashPageOfDocument(bytes[:n])
 	str := imageHash.ConvertHashToString(hash)
 	fmt.Println(str)
-	assert.Equal(t, str, "LmPjeyvClM4")
+	assert.Equal(t, "BOKEAeQ48cL", str)
 }
 
 func TestHashingFile2(t *testing.T) {
 	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(File2)))
-	_, err := base64.StdEncoding.Decode(bytes, []byte(File2))
+	n, err := base64.StdEncoding.Decode(bytes, []byte(File2))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	imageHash := Hash{}
-	hash := imageHash.HashPageOfDocument(bytes)
+	hash := imageHash.HashPageOfDocument(bytes[:n])
 	str := imageHash.ConvertHashToString(hash)
 	fmt.Println(str)
-	assert.Equal(t, str, "JWqHUeDCQE4")
+	assert.Equal(t, "Mf0zt0s3a", str)
 }
 
 func TestHashingFile3(t *testing.T) {
 	bytes := make([]byte, base64.StdEncoding.DecodedLen(len(File3)))
-	_, err := base64.StdEncoding.Decode(bytes, []byte(File3))
+	n, err := base64.StdEncoding.Decode(bytes, []byte(File3))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	imageHash := Hash{}
-	hash := imageHash.HashPageOfDocument(bytes)
+	hash := imageHash.HashPageOfDocument(bytes[:n])
 	str := imageHash.ConvertHashToString(hash)
 	fmt.Println(str)
-	assert.Equal(t, str, "WMImKskNj26")
+	assert.Equal(t, "6WMIm2KskNj", str)
 }
